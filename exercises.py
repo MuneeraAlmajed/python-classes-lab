@@ -12,6 +12,17 @@ class Game():
         
     def play_game(self):
         print('Shall we play a game ?') 
+        
+        while not self.winner and not self.tie:
+            self.print_board()
+            self.print_message()
+            self.get_move()
+            self.check_for_winner()
+            self.check_for_tie()
+            
+            if not self.winner and not self.tie:
+                self.switch_turn()
+                
         self.print_board()
         self.print_message()
         
@@ -36,6 +47,44 @@ class Game():
             print(f'{self.winner} wins the game')
         else:
             print(f"It's player {self.turn}'s turn ")
+            
+    def get_move(self):
+        while True:
+            move = input('Enter a valid move (example: A1): ').lower()
+
+            if move in self.board and self.board[move] is None:
+                self.board[move] = self.turn
+                break
+            else:
+                print('Invalid move. Try again.')
+                
+    def check_for_winner(self):
+        b = self.board
+        
+        if (
+        b['a1'] and b['a1'] == b['b1'] == b['c1'] or
+        b['a2'] and b['a2'] == b['b2'] == b['c2'] or
+        b['a3'] and b['a3'] == b['b3'] == b['c3'] or
+        b['a1'] and b['a1'] == b['a2'] == b['a3'] or
+        b['b1'] and b['b1'] == b['b2'] == b['b3'] or
+        b['c1'] and b['c1'] == b['c2'] == b['c3'] or
+        b['a1'] and b['a1'] == b['b2'] == b['c3'] or
+        b['c1'] and b['c1'] == b['b2'] == b['a3']
+    ):
+            
+            self.winner = self.turn
+            
+    def check_for_tie(self):
+        if all(self.board.values()) and not self.winner:
+            self.tie = True
+            
+    def switch_turn(self):
+        if self.turn == 'X':
+            self.turn = 'O'
+        else:
+            self.turn = 'X'
+        
+            
         
     
 game_instance = Game()
